@@ -65,8 +65,11 @@ class Game:
             self.current_player = self.get_next_player()
 
     def get_next_player(self):
-        # Implementa la lógica para determinar el próximo jugador
-        pass
+        for player in self.players:
+            if player == self.current_player():
+                current_index = self.players.index(player)
+                break
+        return self.players[current_index + 1 % len(self.players)]
 
 if __name__ == "__main__":
     game = Game()
