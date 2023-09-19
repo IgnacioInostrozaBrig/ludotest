@@ -53,7 +53,7 @@ class Game:
         print(f"{self.current_player.name} tiene el valor más alto y comienza el juego.")
 
         while True:
-            print(self.current_player)
+            print(self.current_player.name)
             input(f"Presiona Enter para que {self.current_player.name} de color {self.current_player.color} juegue...")
             dice_value = self.dice.roll()
             print(f"{self.current_player.name} tiró un {dice_value}.")
@@ -66,10 +66,10 @@ class Game:
 
     def get_next_player(self):
         for player in self.players:
-            if player == self.current_player():
+            if player == self.current_player:
                 current_index = self.players.index(player)
                 break
-        return self.players[current_index + 1 % len(self.players)]
+        return self.players[(current_index + 1) % len(self.players)]
 
 if __name__ == "__main__":
     game = Game()
