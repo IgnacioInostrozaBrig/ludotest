@@ -23,15 +23,21 @@ class Game:
         playerCount = 0
         for i in range(1, num_players + 1):
             name = input(f"Ingrese el nombre del jugador {i}: ")
+            if name == "":
+                name = f"Jugador {playerCount + 1}" 
             if (playerCount == 0):
                 color = "\033[34mazul\033[00m"
+                origin = 0
             elif (playerCount == 1):
                 color = "\033[31mrojo\033[00m"
+                origin = 13
             elif (playerCount == 2):
                 color = "\033[32mverde\033[00m"
+                origin = 26
             else:
                 color = "\033[33mamarillo\033[00m"
-            self.players.append(Player(name, color))
+                origin = 39
+            self.players.append(Player(name, color, origin))
             print(name + " ha sido inscrito con el color "+ color)
             playerCount += 1
 
