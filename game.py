@@ -1,15 +1,15 @@
+import tkinter as tk
 from dice import Dice
 from board import Board
 from player import Player
 from interface import Interface
-import random
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, root):
         self.players = []
         self.current_player = None
-        self.board = Board()
+        self.board = Board(root).create()
         self.dice = Dice()
 
     def initialize_players(self):
@@ -100,8 +100,17 @@ class Game:
             if player == self.current_player:
                 current_index = self.players.index(player)
                 break
+
         return self.players[(current_index + 1) % len(self.players)]
 
 if __name__ == "__main__":
-    game = Game()
+    root = tk.Tk()
+    root.geometry("1000x640")
+    root.maxsize(1000,640)
+    root.minsize(1000,640)
+    root.title('Ludo')
+
+    game = Game(root)
     game.start()
+
+    root.mainloop()
