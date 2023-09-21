@@ -90,18 +90,49 @@ class Game:
             print(f"{self.current_player.name} tiró un {dice_value}.\n")
 
             # Implementa la lógica para mover la ficha del jugador actual
+            if dice_value == 1 or dice_value == 6:
+                if self.current_player.ingresar_ficha()==True:
+                    print(f"{self.current_player.name} ha agregado una ficha al tablero.\n")
+                    for ficha in self.current_player.fichas:
+                        if ficha.ingame == False:
+                            ficha.ingame = True
+                            ficha.move(0)
+                            break
+                else:
+                    print(f"{self.current_player.name} se ha movido {dice_value} posiciones .\n")
+                    self.current_player.ultima_ficha().move(dice_value)
+                
+            else:
+                if self.current_player.ultima_ficha() == False:
+                    print(f"{self.current_player.name}, necesita un 1 o un 6 para ingresar una ficha.\n")
+                else:
+                    print(f"{self.current_player.name} se ha movido {dice_value} posiciones .\n")
+                    self.current_player.ultima_ficha().move(dice_value)
+
+
+
             # Verifica las reglas del juego y actualiza el estado del juego
+            for ficha in self.current_player.fichas:
+                #
 
-            # Cambia al siguiente jugador
-            self.current_player = self.get_next_player()
-
-    def get_next_player(self):
-        for player in self.players:
-            if player == self.current_player:
-                current_index = self.players.index(player)
+            if self.current_player.ganador() == True:
+                print(f"{self.current_player.name} es el ganador.\n")
                 break
 
-        return self.players[(current_index + 1) % len(self.players)]
+            # Cambia al siguiente jugador
+            self.current_player = self.get_next_player(dice_value)
+            print("\n")
+            print("\n")
+
+    def get_next_player(self, dice_value):
+        if dice_value == 1 or dice_value == 6:
+            return self.current_player
+        else:
+            for player in self.players:
+                if player == self.current_player:
+                    current_index = self.players.index(player)
+                    break
+            return self.players[(current_index + 1) % len(self.players)]
 
 if __name__ == "__main__":
     root = tk.Tk()
