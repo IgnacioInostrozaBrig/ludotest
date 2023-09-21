@@ -162,22 +162,29 @@ class Game:
                                 self.board.add_piece(ficha.progress+32, BoardColor.BLUE, '')
                             elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-20, BoardColor.BLUE, '')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+21, BoardColor.BLUE, '')
                         case "\033[31mrojo\033[00m":
-                            #49 tablero = 0
                             if ficha.progress <= 22:
                                 self.board.add_piece(ficha.progress+45, BoardColor.RED, '')
                             elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-7, BoardColor.RED, '')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+27, BoardColor.RED, '')
                         case "\033[32mverde\033[00m":
                             if ficha.progress <= 9:
                                 self.board.add_piece(ficha.progress+58, BoardColor.GREEN, '')
-                            elif ficha.progress <= 51:
+                            elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress+6, BoardColor.GREEN, '')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+33, BoardColor.GREEN, '')
                         case "\033[33mamarillo\033[00m":
                             if ficha.progress <= 48:
                                 self.board.add_piece(ficha.progress+19, BoardColor.YELLOW, '')
-                            elif ficha.progress <= 51:
+                            elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-32, BoardColor.YELLOW, '')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+15, BoardColor.YELLOW, '')
 
                 if ficha.ingame == True and ficha.valor >= 2:
                     match player.color:
@@ -186,22 +193,29 @@ class Game:
                                 self.board.add_piece(ficha.progress+32, BoardColor.BLUE, 'gray25')
                             elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-20, BoardColor.BLUE, 'gray25')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+21, BoardColor.BLUE, 'gray25')
                         case "\033[31mrojo\033[00m":
-                            #49 tablero = 0
                             if ficha.progress <= 22:
                                 self.board.add_piece(ficha.progress+45, BoardColor.RED, 'gray25')
                             elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-7, BoardColor.RED, 'gray25')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+27, BoardColor.RED, 'gray25')
                         case "\033[32mverde\033[00m":
                             if ficha.progress <= 9:
                                 self.board.add_piece(ficha.progress+58, BoardColor.GREEN, 'gray25')
-                            elif ficha.progress <= 51:
+                            elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress+6, BoardColor.GREEN, 'gray25')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+33, BoardColor.GREEN, 'gray25')
                         case "\033[33mamarillo\033[00m":
                             if ficha.progress <= 48:
                                 self.board.add_piece(ficha.progress+19, BoardColor.YELLOW, 'gray25')
-                            elif ficha.progress <= 51:
+                            elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-32, BoardColor.YELLOW, 'gray25')
+                            elif ficha.progress <= 58:
+                                self.board.add_piece(ficha.progress+15, BoardColor.YELLOW, 'gray25')
 
 
 if __name__ == "__main__":

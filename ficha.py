@@ -14,6 +14,8 @@ class Ficha:
     def move(self, steps):
         # Actualiza el progreso de la ficha
         self.progress += steps
+        if self.progress > 58:
+            self.progress = 58
 
         # Verifica si la ficha ha completado una vuelta al tablero
         if self.progress > 52:
