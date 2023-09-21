@@ -22,6 +22,24 @@ class Board:
         self.canvas = tk.Canvas(master, width=BoardSetting.BOARD_WIDTH, height=BoardSetting.BOARD_HEIGHT, bg="black")
         self.throw_dice_button = tk.Button(master, text='Tirar Dado', command=self.update_dice_number, width=20, height=2)
         self.current_dice_number_label = tk.Label(master, text=str(self.current_dice_number), width=10, height=5, font=("Arial", 40))
+        self.home_coordinates_map = {
+            0: (82.5, 82.5, 115.5, 115.5),
+            1: (82.5, 162.5, 115.5, 195.5),
+            2: (162.5, 82.5, 195.5, 115.5),
+            3: (162.5, 162.5, 195.5, 195.5),
+            4: (82.5, 442.5, 115.5, 475.5),
+            5: (82.5, 522.5, 115.5, 555.5),
+            6: (162.5, 442.5, 195.5, 475.5),
+            7: (162.5, 522.5, 195.5, 555.5),
+            8: (442.5, 82.5, 475.5, 115.5),
+            9: (442.5, 162.5, 475.5, 195.5),
+            10: (522.5, 82.5, 555.5, 115.5),
+            11: (522.5, 162.5, 555.5, 195.5),
+            12: (442.5, 442.5, 475.5, 475.5),
+            13: (442.5, 522.5, 475.5, 555.5),
+            14: (522.5, 442.5, 555.5, 475.5),
+            15: (522.5, 522.5, 555.5, 555.5)
+        }
         self.coordinates_map = {
             16: (6, 0), 17: (7, 0), 18: (8, 0), 19: (8, 1), 20: (8, 2), 
             21: (8, 3), 22: (8, 4), 23: (8, 5), 24: (9, 6), 25: (10, 6), 
@@ -322,9 +340,14 @@ class Board:
             self.path_numbers() 
 
     def add_piece(self, number, color):
-        x, y = self.coordinates_map.get(number, (0, 0))
-        piece = self.draw_circle(x + 0.7, y + 0.7, x + 1.3, y + 1.3, color)
-        self.pieces.append(piece)
+        if number < 16:
+            x1, y1, x2, y2 = self.home_coordinates_map.get(number, (0, 0, 0, 0))
+            piece = self.canvas.create_oval(x1, y1, x2, y2, fill=color)
+            self.pieces.append(piece)
+        else:
+            x, y = self.coordinates_map.get(number, (0, 0))
+            piece = self.draw_circle(x + 0.7, y + 0.7, x + 1.3, y + 1.3, color)
+            self.pieces.append(piece)
 
     def remove_pieces(self):
         for piece in self.pieces:
