@@ -20,7 +20,7 @@ class Board:
     def __init__(self, master, parent):
         self.current_dice_number = 0;
         self.canvas = tk.Canvas(master, width=BoardSetting.BOARD_WIDTH, height=BoardSetting.BOARD_HEIGHT, bg="white")
-        self.throw_dice_button = tk.Button(master, text='Tirar Dado', command=lambda: [parent.action_key_pressed()])
+        self.throw_dice_button = tk.Button(master, text='Tirar Dado', command=lambda: [parent.action_key_pressed('blankparam')])
         self.current_dice_number_label = tk.Label(master, text=str(self.current_dice_number), font=("Arial", 30))
         self.jugador_actual_label = tk.Label(master, text='Turno del Jugador X (Azul):', font=("Arial", 15))
         self.ganador_label = tk.Label(master, text='', font=("Arial", 15))
@@ -347,10 +347,10 @@ class Board:
         if BoardSetting.DEBUG:
             self.path_numbers() 
 
-    def add_piece(self, number, color, stippleColor):
+    def add_piece(self, number, color, outline_color):
         if number < 16:
             x1, y1, x2, y2 = self.home_coordinates_map.get(number, (0, 0, 0, 0))
-            piece = self.canvas.create_oval(x1, y1, x2, y2, fill=color, stipple=stippleColor)
+            piece = self.canvas.create_oval(x1, y1, x2, y2, fill=color, outline=outline_color)
             self.pieces.append(piece)
         else:
             x, y = self.coordinates_map.get(number, (0, 0))

@@ -89,7 +89,7 @@ class Game:
         self.current_player = players_with_highest_roll[0]
         print(f"{self.current_player.name} tiene el valor más alto y comienza el juego.\n")
 
-    def action_key_pressed(self):
+    def action_key_pressed(self, blankparam):
         print(self.current_player.name + "\n")
         #input(f"Presiona Enter para que {self.current_player.name} de color {self.current_player.color} juegue...\n")
         dice_value = self.dice.roll()
@@ -174,6 +174,7 @@ class Game:
                 case "\033[33mamarillo\033[00m":
                     ganador_text = 'Ganador del Juego: Amarillo'
             self.board.update_ganador(ganador_text)
+            root.unbind('<Return>')
             #declarar ganador
 
         # Cambia al siguiente jugador
@@ -236,32 +237,32 @@ class Game:
                     match player.color:
                         case "\033[34mazul\033[00m":
                             if ficha.progress <= 35:
-                                self.board.add_piece(ficha.progress+32, BoardColor.BLUE, 'gray25')
+                                self.board.add_piece(ficha.progress+32, BoardColor.BLUE, 'magenta')
                             elif ficha.progress <= 52:
-                                self.board.add_piece(ficha.progress-20, BoardColor.BLUE, 'gray25')
+                                self.board.add_piece(ficha.progress-20, BoardColor.BLUE, 'magenta')
                             elif ficha.progress <= 58:
-                                self.board.add_piece(ficha.progress+21, BoardColor.BLUE, 'gray25')
+                                self.board.add_piece(ficha.progress+21, BoardColor.BLUE, 'magenta')
                         case "\033[31mrojo\033[00m":
                             if ficha.progress <= 22:
-                                self.board.add_piece(ficha.progress+45, BoardColor.RED, 'gray25')
+                                self.board.add_piece(ficha.progress+45, BoardColor.RED, 'magenta')
                             elif ficha.progress <= 52:
-                                self.board.add_piece(ficha.progress-7, BoardColor.RED, 'gray25')
+                                self.board.add_piece(ficha.progress-7, BoardColor.RED, 'magenta')
                             elif ficha.progress <= 58:
-                                self.board.add_piece(ficha.progress+27, BoardColor.RED, 'gray25')
+                                self.board.add_piece(ficha.progress+27, BoardColor.RED, 'magenta')
                         case "\033[32mverde\033[00m":
                             if ficha.progress <= 9:
-                                self.board.add_piece(ficha.progress+58, BoardColor.GREEN, 'gray25')
+                                self.board.add_piece(ficha.progress+58, BoardColor.GREEN, 'magenta')
                             elif ficha.progress <= 52:
-                                self.board.add_piece(ficha.progress+6, BoardColor.GREEN, 'gray25')
+                                self.board.add_piece(ficha.progress+6, BoardColor.GREEN, 'magenta')
                             elif ficha.progress <= 58:
-                                self.board.add_piece(ficha.progress+33, BoardColor.GREEN, 'gray25')
+                                self.board.add_piece(ficha.progress+33, BoardColor.GREEN, 'magenta')
                         case "\033[33mamarillo\033[00m":
                             if ficha.progress <= 48:
-                                self.board.add_piece(ficha.progress+19, BoardColor.YELLOW, 'gray25')
+                                self.board.add_piece(ficha.progress+19, BoardColor.YELLOW, 'magenta')
                             elif ficha.progress <= 52:
-                                self.board.add_piece(ficha.progress-32, BoardColor.YELLOW, 'gray25')
+                                self.board.add_piece(ficha.progress-32, BoardColor.YELLOW, 'magenta')
                             elif ficha.progress <= 58:
-                                self.board.add_piece(ficha.progress+15, BoardColor.YELLOW, 'gray25')
+                                self.board.add_piece(ficha.progress+15, BoardColor.YELLOW, 'magenta')
 
     def printInput(self):
         self.playerbase = entry.get()
@@ -276,15 +277,14 @@ if __name__ == "__main__":
 
     game = Game(root)
 
+    root.bind('<Return>', game.action_key_pressed)
     initTK = tk.Tk()
-    initTK.geometry("250x250")
+    initTK.geometry("300x200")
     entry= Entry(initTK, width= 40)
     entry.focus_set()
     entry.pack()
   
-    ttk.Button(initTK, text= "Okay",width= 20, command=lambda: [game.printInput(), initTK.destroy()]).pack(pady=20)
-
-    #game.start()
+    ttk.Button(initTK, text= "Número de Jugadores",width= 20, command=lambda: [game.printInput(), initTK.destroy()]).pack(pady=20)
 
     root.mainloop()
 
