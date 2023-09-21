@@ -11,7 +11,6 @@ class Game:
         self.current_player = None
         self.board = Board(root)
         self.dice = Dice()
-
         self.board.create()
 
     def initialize_players(self):
@@ -113,9 +112,16 @@ class Game:
 
 
 
-            # Verifica las reglas del juego y actualiza el estado del juego
+            # ver si cae en ficha de otro jugador
             for ficha in self.current_player.fichas:
-                #
+                if ficha.ingame == True:
+                    for player in self.players:
+                        for ficha_enemiga in player.fichas:
+                            if ficha.position == ficha_enemiga.position and ficha_enemiga.final_track == False:
+                                ficha_enemiga.reset()
+
+            #ver cuando se corona
+
 
             if self.current_player.ganador() == True:
                 print(f"{self.current_player.name} es el ganador.\n")
@@ -147,3 +153,8 @@ if __name__ == "__main__":
     game.start()
 
     root.mainloop()
+
+
+
+
+
