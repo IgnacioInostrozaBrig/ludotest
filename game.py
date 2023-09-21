@@ -95,7 +95,7 @@ class Game:
         dice_value = self.dice.roll()
         print(f"{self.current_player.name} tiró un {dice_value}.\n")
         jugador_actual_str = ''
-        match self.current_player.color:
+        match self.get_next_player(dice_value).color:
             case "\033[34mazul\033[00m":
                 jugador_actual_str = 'Turno del Jugador: Azul'
             case "\033[31mrojo\033[00m":
@@ -150,7 +150,7 @@ class Game:
                     continue
                 else:
                     if ficha.ingame == True and comparing_ficha.ingame == True:
-                        if ficha.progress != 0 and comparing_ficha.progress != 0:
+                        if ficha.progress != 0 and comparing_ficha.progress != 0 and ficha.progress < 58 and comparing_ficha.progress < 58:
                             if ficha.position == comparing_ficha.position:
                                 print(f"una ficha de {self.current_player.name} ha sido coronada .\n")
                                 ficha.valor += 1
@@ -196,6 +196,8 @@ class Game:
         self.board.remove_pieces()
         for player in self.players:
             print("NOMBRE DE JUGADOR: ", player.name)
+            numero_de_fichas_fuera = 0
+            value_ingame = player.suma_valor_ingame()
             for ficha in player.fichas:
                 print("FICHAS DEL JUGADOR: ", ficha.progress)
                 #plasmar ficha por ficha en el tablero
@@ -263,6 +265,61 @@ class Game:
                                 self.board.add_piece(ficha.progress-32, BoardColor.YELLOW, 'magenta')
                             elif ficha.progress <= 58:
                                 self.board.add_piece(ficha.progress+15, BoardColor.YELLOW, 'magenta')
+
+                if ficha.ingame == False:
+                    match player.color:
+                        case "\033[34mazul\033[00m":
+                            if numero_de_fichas_fuera == 0 and value_ingame<4:
+                                self.board.add_piece(12, BoardColor.BLUE, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 1 and value_ingame<3:
+                                self.board.add_piece(13, BoardColor.BLUE, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 2 and value_ingame<2:
+                                self.board.add_piece(14, BoardColor.BLUE, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 3 and value_ingame<1:
+                                self.board.add_piece(15, BoardColor.BLUE, 'black')
+                                numero_de_fichas_fuera += 1
+                        case "\033[31mrojo\033[00m":
+                            if numero_de_fichas_fuera == 0 and value_ingame<4:
+                                self.board.add_piece(4, BoardColor.RED, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 1 and value_ingame<3:
+                                self.board.add_piece(5, BoardColor.RED, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 2 and value_ingame<2:
+                                self.board.add_piece(6, BoardColor.RED, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 3 and value_ingame<1:
+                                self.board.add_piece(7, BoardColor.RED, 'black')
+                                numero_de_fichas_fuera += 1
+                        case "\033[32mverde\033[00m":
+                            if numero_de_fichas_fuera == 0 and value_ingame<4:
+                                self.board.add_piece(0, BoardColor.GREEN, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 1 and value_ingame<3:
+                                self.board.add_piece(1, BoardColor.GREEN, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 2 and value_ingame<2:
+                                self.board.add_piece(2, BoardColor.GREEN, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 3 and value_ingame<1:
+                                self.board.add_piece(3, BoardColor.GREEN, 'black')
+                                numero_de_fichas_fuera += 1
+                        case "\033[33mamarillo\033[00m":
+                            if numero_de_fichas_fuera == 0 and value_ingame<4:
+                                self.board.add_piece(8, BoardColor.YELLOW, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 1 and value_ingame<3:
+                                self.board.add_piece(9, BoardColor.YELLOW, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 2 and value_ingame<2:
+                                self.board.add_piece(10, BoardColor.YELLOW, 'black')
+                                numero_de_fichas_fuera += 1
+                            elif numero_de_fichas_fuera == 3 and value_ingame<1:
+                                self.board.add_piece(11, BoardColor.YELLOW, 'black')
+                                numero_de_fichas_fuera += 1
 
     def printInput(self):
         self.playerbase = entry.get()
