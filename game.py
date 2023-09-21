@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import *
+from tkinter import ttk
 from dice import Dice
 from board import Board, BoardColor
 from player import Player
@@ -9,13 +11,14 @@ class Game:
     def __init__(self, root):
         self.players = []
         self.current_player = None
-        self.board = Board(root)
+        self.board = Board(root, self)
         self.dice = Dice()
         self.board.create()
+        self.playerbase = 0
 
-    def initialize_players(self):
+    def initialize_players(self, player_num):
         self.players.clear()
-        num_players = int(input("Ingrese la cantidad de jugadores (2-4): "))
+        num_players = int(player_num)
         if num_players < 2 or num_players > 4:
             print("\033[91mNúmero de jugadores no válido. Debe ser entre 2 y 4.\033[00m")
             self.initialize_players()
@@ -23,7 +26,7 @@ class Game:
 
         playerCount = 0
         for i in range(1, num_players + 1):
-            name = input(f"Ingrese el nombre del jugador {i}: \n")
+            name = ""
             if name == "":
                 name = f"Jugador {playerCount + 1}"
             if playerCount == 0:
@@ -41,17 +44,19 @@ class Game:
             self.players.append(Player(name, color, origin))
             print(f"{name} ha sido inscrito con el color {color}\n")
             playerCount += 1
+        
+        self.start()
 
     def start(self):
         Interface.start()
-        self.initialize_players()
+        #self.initialize_players()
 
         # Determinar quién comienza lanzando el dado
         highest_roll = 0
         players_with_highest_roll = []
 
         for player in self.players:
-            input(f"Presiona Enter para que {player.name} de color {player.color} tire el dado...\n")
+            #input(f"Presiona Enter para que {player.name} de color {player.color} tire el dado...\n")
             dice_value = self.dice.roll()
             print(f"{player.name} tiró un {dice_value}.")
 
@@ -69,7 +74,7 @@ class Game:
                 new_players_with_highest_roll = []
 
                 for player in players_with_highest_roll:
-                    input(f"Presiona Enter para que {player.name} de color {player.color} tire el dado...\n")
+                    #input(f"Presiona Enter para que {player.name} de color {player.color} tire el dado...\n")
                     dice_value = self.dice.roll()
                     print(f"{player.name} tiró un {dice_value}.")
 
@@ -84,56 +89,97 @@ class Game:
         self.current_player = players_with_highest_roll[0]
         print(f"{self.current_player.name} tiene el valor más alto y comienza el juego.\n")
 
-        while True:
-            print(self.current_player.name + "\n")
-            input(f"Presiona Enter para que {self.current_player.name} de color {self.current_player.color} juegue...\n")
-            dice_value = self.dice.roll()
-            print(f"{self.current_player.name} tiró un {dice_value}.\n")
+    def action_key_pressed(self):
+        print(self.current_player.name + "\n")
+        #input(f"Presiona Enter para que {self.current_player.name} de color {self.current_player.color} juegue...\n")
+        dice_value = self.dice.roll()
+        print(f"{self.current_player.name} tiró un {dice_value}.\n")
+        jugador_actual_str = ''
+        match self.current_player.color:
+            case "\033[34mazul\033[00m":
+                jugador_actual_str = 'Turno del Jugador: Azul'
+            case "\033[31mrojo\033[00m":
+                jugador_actual_str = 'Turno del Jugador: Rojo'
+            case "\033[32mverde\033[00m":
+                jugador_actual_str = 'Turno del Jugador: Verde'
+            case "\033[33mamarillo\033[00m":
+                jugador_actual_str = 'Turno del Jugador: Amarillo'
+        self.board.update_dice_number(dice_value, jugador_actual_str)
 
-            # Implementa la lógica para mover la ficha del jugador actual
-            if dice_value == 1 or dice_value == 6:
-                if self.current_player.ingresar_ficha()==True:
-                    print(f"{self.current_player.name} ha agregado una ficha al tablero.\n")
-                    for ficha in self.current_player.fichas:
-                        if ficha.ingame == False:
-                            ficha.ingame = True
-                            ficha.move(0)
-                            break
-                else:
-                    print(f"{self.current_player.name} se ha movido {dice_value} posiciones .\n")
-                    self.current_player.ultima_ficha().move(dice_value)
-                
+        # Implementa la lógica para mover la ficha del jugador actual
+        if dice_value == 1 or dice_value == 6:
+            if self.current_player.ingresar_ficha()==True and self.current_player.suma_valor_ingame() < 4:
+                print(f"{self.current_player.name} ha agregado una ficha al tablero.\n")
+                for ficha in self.current_player.fichas:
+                    if ficha.ingame == False:
+                        ficha.ingame = True
+                        ficha.move(0)
+                        break
             else:
-                if self.current_player.ultima_ficha() == False:
-                    print(f"{self.current_player.name}, necesita un 1 o un 6 para ingresar una ficha.\n")
+                print(f"{self.current_player.name} se ha movido {dice_value} posiciones .\n")
+                self.current_player.ultima_ficha().move(dice_value)
+            
+        else:
+            if self.current_player.ultima_ficha() == False:
+                print(f"{self.current_player.name}, necesita un 1 o un 6 para ingresar una ficha.\n")
+            else:
+                print(f"{self.current_player.name} se ha movido {dice_value} posiciones .\n")
+                self.current_player.ultima_ficha().move(dice_value)
+
+
+
+        # ver si cae en ficha de otro jugador
+        for ficha in self.current_player.fichas:
+            if ficha.ingame == True:
+                for player in self.players:
+                    if player != self.current_player:
+                        for ficha_enemiga in player.fichas:
+                            if ficha.position == ficha_enemiga.position and ficha_enemiga.final_track == False:
+                                print(f"se ha reseteado una ficha de {player.name} por {self.current_player.name}  .\n")
+                                ficha_enemiga.reset()
+
+        #ver cuando se corona
+        is_coronado = False
+        for ficha in self.current_player.fichas:
+            if (is_coronado):
+                    break
+            for comparing_ficha in self.current_player.fichas:
+                if (is_coronado):
+                    break
+                if ficha == comparing_ficha:
+                    continue
                 else:
-                    print(f"{self.current_player.name} se ha movido {dice_value} posiciones .\n")
-                    self.current_player.ultima_ficha().move(dice_value)
+                    if ficha.ingame == True and comparing_ficha.ingame == True:
+                        if ficha.progress != 0 and comparing_ficha.progress != 0:
+                            if ficha.position == comparing_ficha.position:
+                                print(f"una ficha de {self.current_player.name} ha sido coronada .\n")
+                                ficha.valor += 1
+                                comparing_ficha.reset()
+                                is_coronado = True
+            
 
+        #update board
+        self.update_board_state()
 
+        if self.current_player.ganador() == True:
+            print(f"{self.current_player.name} es el ganador.\n")
+            ganador_text = ''
+            match self.current_player.color:
+                case "\033[34mazul\033[00m":
+                    ganador_text = 'Ganador del Juego: Azul'
+                case "\033[31mrojo\033[00m":
+                    ganador_text = 'Ganador del Juego: Rojo'
+                case "\033[32mverde\033[00m":
+                    ganador_text = 'Ganador del Juego: Verde'
+                case "\033[33mamarillo\033[00m":
+                    ganador_text = 'Ganador del Juego: Amarillo'
+            self.board.update_ganador(ganador_text)
+            #declarar ganador
 
-            # ver si cae en ficha de otro jugador
-            for ficha in self.current_player.fichas:
-                if ficha.ingame == True:
-                    for player in self.players:
-                        if player != self.current_player:
-                            for ficha_enemiga in player.fichas:
-                                if ficha.position == ficha_enemiga.position and ficha_enemiga.final_track == False:
-                                    print(f"se ha reseteado una ficha de {player.name} por {self.current_player.name}  .\n")
-                                    ficha_enemiga.reset()
-
-            #ver cuando se corona
-
-            self.update_board_state()
-
-            if self.current_player.ganador() == True:
-                print(f"{self.current_player.name} es el ganador.\n")
-                break
-
-            # Cambia al siguiente jugador
-            self.current_player = self.get_next_player(dice_value)
-            print("\n")
-            print("\n")
+        # Cambia al siguiente jugador
+        self.current_player = self.get_next_player(dice_value)
+        print("\n")
+        print("\n")
 
     def get_next_player(self, dice_value):
         if dice_value == 1 or dice_value == 6:
@@ -217,6 +263,9 @@ class Game:
                             elif ficha.progress <= 58:
                                 self.board.add_piece(ficha.progress+15, BoardColor.YELLOW, 'gray25')
 
+    def printInput(self):
+        self.playerbase = entry.get()
+        self.initialize_players(self.playerbase)
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -226,7 +275,16 @@ if __name__ == "__main__":
     root.title('Ludo')
 
     game = Game(root)
-    game.start()
+
+    initTK = tk.Tk()
+    initTK.geometry("250x250")
+    entry= Entry(initTK, width= 40)
+    entry.focus_set()
+    entry.pack()
+  
+    ttk.Button(initTK, text= "Okay",width= 20, command=lambda: [game.printInput(), initTK.destroy()]).pack(pady=20)
+
+    #game.start()
 
     root.mainloop()
 

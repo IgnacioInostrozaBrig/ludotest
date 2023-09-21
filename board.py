@@ -17,11 +17,13 @@ class BoardColor:
     GRAY = '#A9A9A9'
 
 class Board:
-    def __init__(self, master):
+    def __init__(self, master, parent):
         self.current_dice_number = 0;
         self.canvas = tk.Canvas(master, width=BoardSetting.BOARD_WIDTH, height=BoardSetting.BOARD_HEIGHT, bg="white")
-        self.throw_dice_button = tk.Button(master, text='Tirar Dado', command=self.update_dice_number, width=20, height=2)
-        self.current_dice_number_label = tk.Label(master, text=str(self.current_dice_number), width=10, height=5, font=("Arial", 40))
+        self.throw_dice_button = tk.Button(master, text='Tirar Dado', command=lambda: [parent.action_key_pressed()])
+        self.current_dice_number_label = tk.Label(master, text=str(self.current_dice_number), font=("Arial", 30))
+        self.jugador_actual_label = tk.Label(master, text='Turno del Jugador X (Azul):', font=("Arial", 15))
+        self.ganador_label = tk.Label(master, text='', font=("Arial", 15))
         self.home_coordinates_map = {
             0: (82.5, 82.5, 115.5, 115.5),
             1: (82.5, 162.5, 115.5, 195.5),
@@ -60,9 +62,13 @@ class Board:
         }
         self.pieces = []
 
-    def update_dice_number(self):
-        self.current_dice_number = random.randint(1, 6)
+    def update_dice_number(self, dice_roll, jugador_actual):
+        self.current_dice_number = dice_roll
         self.current_dice_number_label.config(text=str(self.current_dice_number))
+        self.jugador_actual_label.config(text=jugador_actual)
+    def update_ganador(self, ganador):
+        self.ganador_label.config(text=ganador)
+        self.throw_dice_button.destroy()
 
 
     def draw_rectangle(self, lx, ly, bx, by, color, width):
@@ -333,8 +339,10 @@ class Board:
         self.path()
         self.home()
 
-        self.throw_dice_button.place(x=715, y=400)
-        self.current_dice_number_label.place(x=710, y=100)
+        self.throw_dice_button.place(x=650, y=250)
+        self.current_dice_number_label.place(x=650, y=150)
+        self.jugador_actual_label.place(x=650, y=50)
+        self.ganador_label.place(x=650, y=350)
 
         if BoardSetting.DEBUG:
             self.path_numbers() 

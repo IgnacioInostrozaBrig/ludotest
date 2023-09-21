@@ -31,11 +31,21 @@ class Player:
             return ultima_ficha
     
     def ganador(self):
-        ganador = True
+        ganador = False
+        puntaje_total = 0
         for ficha in self.fichas:
-            if ficha.winner == False:
-                ganador = False
-                break
+            if ficha.winner == True:
+                puntaje_total += ficha.valor
+        
+        if (puntaje_total >= 4):
+            ganador = True
         return ganador
+    
+    def suma_valor_ingame(self):
+        suma_valor = 0
+        for ficha in self.fichas:
+            if ficha.ingame == True:
+                suma_valor += ficha.valor
+        return suma_valor
 
 
