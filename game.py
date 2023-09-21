@@ -113,13 +113,14 @@ class Game:
 
 
             # ver si cae en ficha de otro jugador
-            """
             for ficha in self.current_player.fichas:
                 if ficha.ingame == True:
                     for player in self.players:
-                        for ficha_enemiga in player.fichas:
-                            if ficha.position == ficha_enemiga.position and ficha_enemiga.final_track == False:
-                                ficha_enemiga.reset()"""
+                        if player != self.current_player:
+                            for ficha_enemiga in player.fichas:
+                                if ficha.position == ficha_enemiga.position and ficha_enemiga.final_track == False:
+                                    print(f"se ha reseteado una ficha de {player.name} por {self.current_player.name}  .\n")
+                                    ficha_enemiga.reset()
 
             #ver cuando se corona
 
@@ -159,13 +160,13 @@ class Game:
                         case "\033[34mazul\033[00m":
                             if ficha.progress <= 35:
                                 self.board.add_piece(ficha.progress+32, BoardColor.BLUE)
-                            elif ficha.progress <= 51:
+                            elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-20, BoardColor.BLUE)
                         case "\033[31mrojo\033[00m":
                             #49 tablero = 0
                             if ficha.progress <= 22:
                                 self.board.add_piece(ficha.progress+45, BoardColor.RED)
-                            elif ficha.progress <= 51:
+                            elif ficha.progress <= 52:
                                 self.board.add_piece(ficha.progress-7, BoardColor.RED)
                         case "\033[32mverde\033[00m":
                             if ficha.progress <= 9:

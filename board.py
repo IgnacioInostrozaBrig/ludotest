@@ -339,10 +339,10 @@ class Board:
         if BoardSetting.DEBUG:
             self.path_numbers() 
 
-    def add_piece(self, number, color):
+    def add_piece(self, number, color, stippleColor):
         if number < 16:
             x1, y1, x2, y2 = self.home_coordinates_map.get(number, (0, 0, 0, 0))
-            piece = self.canvas.create_oval(x1, y1, x2, y2, fill=color)
+            piece = self.canvas.create_oval(x1, y1, x2, y2, fill=color, stipple=stippleColor)
             self.pieces.append(piece)
         else:
             x, y = self.coordinates_map.get(number, (0, 0))

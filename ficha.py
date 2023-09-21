@@ -12,30 +12,20 @@ class Ficha:
         self.progress = 0
 
     def move(self, steps):
-        if not self.ingame and steps not in [1, 6]:
-            print("La ficha no puede moverse si no está en juego y no se sacó un 1 o un 6.")
-            return
-
-        # Calcula la nueva posición de la ficha
-        new_position = self.origin + self.progress + steps
-
-        # Verifica si la ficha ha completado una vuelta al tablero
-        if new_position >= 52:
-            self.final_track = True
-            new_position -= 52
-
         # Actualiza el progreso de la ficha
         self.progress += steps
 
-        # Verifica si la ficha ha llegado al destino final
-        if self.final_track and self.progress >= 52:
-            self.winner = True
+        # Verifica si la ficha ha completado una vuelta al tablero
+        if self.progress > 52:
+            self.final_track = True
 
+        # Verifica si la ficha ha llegado al destino final
+        if self.final_track and self.progress >= 58:
+            self.winner = True
             print(f"Ficha del jugador {self.player.name} de color {self.color} ha llegado al destino final!")
 
         # Actualiza la posición de la ficha en juego
         self.position = (self.position + steps ) % 52
-        self.ingame = True
     
     def reset(self): #falta arreglarlo cuando está coronada
         self.ingame = False 
