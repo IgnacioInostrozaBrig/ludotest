@@ -19,7 +19,7 @@ class BoardColor:
 class Board:
     def __init__(self, master):
         self.current_dice_number = 0;
-        self.canvas = tk.Canvas(master, width=BoardSetting.BOARD_WIDTH, height=BoardSetting.BOARD_HEIGHT, bg="black")
+        self.canvas = tk.Canvas(master, width=BoardSetting.BOARD_WIDTH, height=BoardSetting.BOARD_HEIGHT, bg="white")
         self.throw_dice_button = tk.Button(master, text='Tirar Dado', command=self.update_dice_number, width=20, height=2)
         self.current_dice_number_label = tk.Label(master, text=str(self.current_dice_number), width=10, height=5, font=("Arial", 40))
         self.home_coordinates_map = {
@@ -278,10 +278,10 @@ class Board:
         self.draw_rectangle(13.5, 8.5, 14.5, 9.5, BoardColor.BLUE, 1)
 
         # Draw arrow indicating where to enter the path for each player
-        self.draw_arrow(6.5, 2.5, 7.5, 3.5, BoardColor.YELLOW, 'right')
-        self.draw_arrow(8.5, 12.5, 9.5, 13.5, BoardColor.RED, 'left')
-        self.draw_arrow(2.5, 8.5, 3.5, 9.5, BoardColor.GREEN, 'top')
-        self.draw_arrow(12.5, 6.5, 13.5, 7.5, BoardColor.BLUE, 'bottom')
+        #self.draw_arrow(6.5, 2.5, 7.5, 3.5, BoardColor.YELLOW, 'right')
+        #self.draw_arrow(8.5, 12.5, 9.5, 13.5, BoardColor.RED, 'left')
+        #self.draw_arrow(2.5, 8.5, 3.5, 9.5, BoardColor.GREEN, 'top')
+        #self.draw_arrow(12.5, 6.5, 13.5, 7.5, BoardColor.BLUE, 'bottom')
 
         # Formulas to draw squares (x and y starting from 0)
 

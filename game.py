@@ -1,6 +1,6 @@
 import tkinter as tk
 from dice import Dice
-from board import Board
+from board import Board, BoardColor
 from player import Player
 from interface import Interface
 
@@ -113,15 +113,17 @@ class Game:
 
 
             # ver si cae en ficha de otro jugador
+            """
             for ficha in self.current_player.fichas:
                 if ficha.ingame == True:
                     for player in self.players:
                         for ficha_enemiga in player.fichas:
                             if ficha.position == ficha_enemiga.position and ficha_enemiga.final_track == False:
-                                ficha_enemiga.reset()
+                                ficha_enemiga.reset()"""
 
             #ver cuando se corona
 
+            self.update_board_state()
 
             if self.current_player.ganador() == True:
                 print(f"{self.current_player.name} es el ganador.\n")
@@ -141,6 +143,40 @@ class Game:
                     current_index = self.players.index(player)
                     break
             return self.players[(current_index + 1) % len(self.players)]
+        
+    def update_board_state(self):
+        self.board.remove_pieces()
+        for player in self.players:
+            print("NOMBRE DE JUGADOR: ", player.name)
+            for ficha in player.fichas:
+                print("FICHAS DEL JUGADOR: ", ficha.progress)
+                #plasmar ficha por ficha en el tablero
+                #36 pos es igual al 16 de del tablero
+                #pos max 51 --------- 67
+                #0 = 32
+                if ficha.ingame == True:
+                    match player.color:
+                        case "\033[34mazul\033[00m":
+                            if ficha.progress <= 35:
+                                self.board.add_piece(ficha.progress+32, BoardColor.BLUE)
+                            elif ficha.progress <= 51:
+                                self.board.add_piece(ficha.progress-20, BoardColor.BLUE)
+                        case "\033[31mrojo\033[00m":
+                            #49 tablero = 0
+                            if ficha.progress <= 22:
+                                self.board.add_piece(ficha.progress+45, BoardColor.RED)
+                            elif ficha.progress <= 51:
+                                self.board.add_piece(ficha.progress-7, BoardColor.RED)
+                        case "\033[32mverde\033[00m":
+                            if ficha.progress <= 9:
+                                self.board.add_piece(ficha.progress+58, BoardColor.GREEN)
+                            elif ficha.progress <= 51:
+                                self.board.add_piece(ficha.progress+6, BoardColor.GREEN)
+                        case "\033[33mamarillo\033[00m":
+                            if ficha.progress <= 48:
+                                self.board.add_piece(ficha.progress+19, BoardColor.YELLOW)
+                            elif ficha.progress <= 51:
+                                self.board.add_piece(ficha.progress-32, BoardColor.YELLOW)
 
 if __name__ == "__main__":
     root = tk.Tk()
