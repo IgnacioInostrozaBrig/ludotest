@@ -9,8 +9,10 @@ class Game:
     def __init__(self, root):
         self.players = []
         self.current_player = None
-        self.board = Board(root).create()
+        self.board = Board(root)
         self.dice = Dice()
+
+        self.board.create()
 
     def initialize_players(self):
         self.players.clear()

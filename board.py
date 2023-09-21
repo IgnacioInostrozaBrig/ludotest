@@ -40,10 +40,12 @@ class Board:
             86: (1, 7), 87: (2, 7), 88: (3, 7), 89: (4, 7), 90: (5, 7), 
             91: (6, 7)
         }
+        self.pieces = []
 
     def update_dice_number(self):
         self.current_dice_number = random.randint(1, 6)
         self.current_dice_number_label.config(text=str(self.current_dice_number))
+
 
     def draw_rectangle(self, lx, ly, bx, by, color, width):
         self.canvas.create_rectangle(
@@ -69,12 +71,12 @@ class Board:
         )
 
     def draw_circle(self, x1, y1, x2, y2, color):
-        self.canvas.create_oval(
+        return self.canvas.create_oval(
             x1 * BoardSetting.SQUARE_SIZE,
             y1 * BoardSetting.SQUARE_SIZE,
             x2 * BoardSetting.SQUARE_SIZE,
             y2 * BoardSetting.SQUARE_SIZE,
-            fill=color
+            fill=color,
         )
 
     def draw_arrow(self, x1, y1, x2, y2, color, point):
@@ -319,9 +321,16 @@ class Board:
         if BoardSetting.DEBUG:
             self.path_numbers() 
 
-    def add_piece(self, number):
+    def add_piece(self, number, color):
         x, y = self.coordinates_map.get(number, (0, 0))
-        self.draw_circle(x + 0.7, y + 0.7, x + 1.3, y + 1.3, BoardColor.GRAY)
+        piece = self.draw_circle(x + 0.7, y + 0.7, x + 1.3, y + 1.3, color)
+        self.pieces.append(piece)
+
+    def remove_pieces(self):
+        for piece in self.pieces:
+            self.canvas.delete(piece)
+
+        self.pieces = []
 
     def get_canvas(self):
         return self.canvas
